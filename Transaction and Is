@@ -1,0 +1,119 @@
+
+
+Transactions should satisfy ACID (Automicity, Consistency, Isolation and Durability) properties.
+
+Automicity : If one part of transaction does'nt work like it supposed to, other will fail as a result. vice versa
+
+Consistency: DB must be valid after the transaction.All constaints must be satisfied.
+
+Isolation: Concurrent transection must no effect each others.
+
+Durability: Data written by a successful transection must be recoded in persistent state.
+
+
+
+
+
+Trans. are atomic units that can be committed or roll bakced. If trans. makes multiple changes in database either all committed or rolled backed.
+
+
+start transaction:
+=================
+
+
+START TRANSACTION;
+
+or
+
+BEGIN;
+
+
+
+use bank;-----------------------------database name
+
+
+start transaction;
+
+update account set opening_balance = opening_balance-100 where custid= 'c00002';
+
+------------------------------------------------------------------------------------->can rolled back or commit 
+
+select * from account;
+
+
+update account set opening_balance = opening_balance-100 where custid= 'c00003';
+
+commit;
+
+select * from account;
+
+by default, autocommit is ON, if it is in OFF, need to explicitly issue COMMIT statement to commit a transaction.
+
+
+select @@autocommit;
+1-------------------------------------------------->ON
+
+SET autocommit = 0;
+0-------------------------------------------------->OFF
+
+DDL statements,
+
+	CREATE OR DROP for databases				|	can'nt be rolled back  
+	CREATE, DROP or ALTER for tables and stored procedures  |	can'nt be rolled back
+
+
+
+SAVEPOINTS:
+========
+
+can roll back to certain points in the transactions without terminating	the transaction.
+
+start trasaction;
+
+use bank;
+
+update account set opening_balance = opening_balance-100 where custid= 'c00002';
+
+update account set opening_balance = opening_balance-100 where custid= 'c00003';
+
+select * from account;
+
+SAVEPOINT Go_back;--------------------------------->Go_back name of savepoint
+
+
+update account set opening_balance = opening_balance-100 where custid= 'c00004';  ------------------------->no c00004 custid 
+
+rollback TO Go_back;
+
+commit;
+
+
+
+
+=============================================================================Isolation===============================================================================
+
+
+Several ways that a transaction can be interfered by other transactions that rum simultaneously with it. 
+ 
+	This interference will cause something called **Read Phenomenon.**
+
+Dirty Read:
+Non-Repeatable Read:
+Pantom Read:
+Serialization Anomaly:
+
+
+
+Isolation Levels:
+================
+
+Read Uncommitted,
+Read Committed
+Repeatable Read,
+Serializable
+
+
+
+
+
+
