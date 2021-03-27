@@ -1,0 +1,124 @@
+CREATE USER 'dbatest'@'localhost' IDENTIFIED BY 'Song@122';
+
+SHOW GRANTS FOR 'dbatest'@'localhost';
+
+GRANT SELECT ON employees.* TO 'dbatest'@'localhost';
+
+SHOW GRANTS FOR 'dbatest'@'localhost';
+
+
+
+open another window for 'dbatest' user==
+
+mysql -u 'dbatest' -p 'Song@122'
+
+show databases;
+
+use employees;
+
+show tables;
+
+
+
+GRANT SELECT,INSERT,UPDATE ON test1.* TO 'dbatest'@'localhost';
+
+
+
+SHOW GRANTS FOR CURRENT_USER();
+
+
+REVOKE:
+=======
+
+
+REVOKE INSERT ON test1.* FROM 'dbatest'@'localhost';
+
+SHOW GRANTS FOR CURRENT_USER();
+
+PARTIAL REVOKE;
+==============
+
+
+GRANT SELECT,INSERT,UPDATE ON *.* TO 'dbatest'@'localhost'; ============>GIVE PRIVILEGES TO ALL DATABASE
+
+REVOKE INSERT ON test1.* FROM 'dbatest'@'localhost';
+
+SELECT @@partial_revokes;
+
+
+GLOBAL PRIVILEGES:
+=================
+
+
+GRANT ALL ON *.* TO 'dbatest'@'localhost';
+
+GRANT SELECT,INSERT ON *.* TO 'dbatest'@'localhost';
+
+
+DATABASE PRIVILEGES;
+====================
+
+CREATE DATABASE mydb;
+
+GRANT ALL ON mydb.* TO 'dbatest'@'localhost';
+
+GRANT SELECT,INSERT ON mydb.* TO 'dbatest'@'localhost';
+
+
+================TABLE PRIVILEGES=================
+
+
+USE mydb
+
+CREATE TABLE mytbl(c1 INT, NAME VARCHAR(200));
+
+GRANT ALL ON mydb.mytbl TO 'database'@'localhost';
+
+SHOW GRANTS FOR 'dbatest'@'localhost';
+
+SHOW GRANTS FOR 'dbatest'@'localhost'\G; -----------------------NEVER GIVE ALL PERMISSION TO ANY USER
+
+
+COLUMN PRIVILEGES:
+'=================
+
+GRANT SELECT (c1), INSERT(c1, NAME) ON mydb.mytbl TO 'dbatest'@'localhost';
+
+
+ROUTINES: To Grant create routines means user can create procedure and routines
+
+GRANT CREATE ROUTINE ON employees.* TO 'dbatest'@'localhost';
+
+GRANT EXECUTE ON PROCEDURE employees.GetAllProducts TO 'dbatest'@'localhost';--------------employess.GetAllProducts is a stored procedure
+
+
+
+================================ GRANT OPTION==========================================================
+
+CREATE USER 'venkat1'@'localhost' IDENTIFIED BY 'Song@122';
+
+GRANT SELECT ON bank.account TO 'venkat1'@'localhost' with grant option;   ---------------------->have grant permission only to bank database account table
+
+SHOW GRANTS FOR 'venkat1'@'localhost'
+
+SELECT * FROM bank.account;
+
+
+now connect user venkat1 and give permission to venkat2
+
+
+
+GRANT SELECT ON bank.account TO 'venkat2'@'localhost'; ------------------------->venkat1 user gave grant permission to venkat2 user
+
+
+*** venkat2 have only SELECT permission without (with grant) permission, but if get INSERT withgrant previleges, then user will have both SELECT,INSERT ((WITH GRANT))
+
+
+
+root user:
+
+
+
+
+GRANT SELECT ON bank.account TO 'venkat2'@'localhost' with grant option;
+
